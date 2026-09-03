@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: catrent-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - catrent-mongo-data:/data/db
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: catrent-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - MONGODB_URI=mongodb://mongodb:27017/catrent
+      - JWT_SECRET=${JWT_SECRET:-catrent-hackathon-secret}
+      - ML_SERVICE_URL=http://ml-service:8000
+      - CORS_ORIGIN=http://localhost:5173
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  ml-service:
+    build:
+      context: ./ml-service
+      dockerfile: Dockerfile
+    container_name: catrent-ml
+    ports:
+      - "8000:8000"
+    environment:
+      - ML_PORT=8000
+      - ML_MONGODB_URI=mongodb://mongodb:27017/catrent
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: catrent-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  catrent-mongo-data:

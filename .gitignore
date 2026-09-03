@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+**/node_modules/
+__pycache__/
+*.pyc
+.pyo
+*.egg-info/
+
+# Build
+dist/
+**/dist/
+build/
+**/build/
+*.js.map
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+**/logs/
+
+# Python ML
+*.pkl
+*.pickle
+models/*.pkl
+.venv/
+**/venv/
+**/env/
+
+# MongoDB
+data/db/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Docker
+docker-compose.override.yml
